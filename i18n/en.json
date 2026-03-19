@@ -1,0 +1,156 @@
+{
+  "nav": {
+    "worldMap": "World Map",
+    "addPlace": "Add Place",
+    "graphs": "Graphs",
+    "solarSector": "Solar Sector",
+    "help": "Help"
+  },
+  "buttons": {
+    "places": "Places",
+    "deleteSelected": "Delete Selected",
+    "restoreStarter": "Restore Starter Places",
+    "findPlace": "Find Place",
+    "savePlace": "Save Place",
+    "clearForm": "Clear Form",
+    "renderGraph": "Render Graph",
+    "yearPrev": "Year -",
+    "yearNext": "Year +",
+    "dayPrev": "Day -",
+    "dayNext": "Day +",
+    "close": "Close",
+    "apply": "Apply"
+  },
+  "views": {
+    "worldMap": "World Map",
+    "addPlace": "Add Place",
+    "graphs": "Graphs",
+    "solarSector": "Solar Sector",
+    "help": "Help"
+  },
+  "messages": {
+    "graphFeedback": "Select a place and render graph. Click on graph for details.",
+    "sectorHelp": "Select a place and use the day-slider. For details click the solar sector.",
+    "addPlaceHelp": "Enter a place (may include an address), then 'Find Place' and 'Save Place' or click on the map to set latitude/longitude.",
+    "addPlaceExample": "e.g. Kuala Lumpur",
+    "noPlaces": "No places available.",
+    "selectPlaceFirst": "Select a place first.",
+    "noYearlyData": "No yearly data available for selected place/year.",
+    "graphCanvasUnavailable": "Graph canvas not available.",
+    "insufficientData": "Insufficient data for selected graph mode.",
+    "noDataForDate": "No data for this date.",
+    "selected": "Selected",
+    "notSelected": "Not selected",
+    "loading": "Loading…"
+  },
+  "labels": {
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "place": "Place",
+    "place1": "Place 1",
+    "place2": "Place 2 (optional)",
+    "year": "Year",
+    "graphMode": "Graph mode",
+    "dayInYear": "Day in year",
+    "placeName": "Place name",
+    "usesDst": "Uses daylight saving time (DST)"
+  },
+  "dialogs": {
+    "selectPlaces": "Select Places",
+    "info": "Info"
+  },
+  "messages2": {
+    "fillAndSave": "Fill in values and click Save Place.",
+    "tipClickMap": "Tip: click on the map to set exact latitude/longitude.",
+    "selectionSummary": "Selected places: {selected} / {total}"
+  },
+  
+  "graph": {
+    "modes": {
+      "rise-set": "Rise & Set",
+      "max-elevation": "Max Elevation",
+      "day-length": "Length of Day"
+    },
+    "legend": {
+      "riseSet": "Rise (solid) / Set (dash)"
+    },
+    "label": {
+      "time": "Time",
+      "deg": "Deg",
+      "daylength": "hh:mm"
+    },
+    "months": ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+  },
+  "tooltip": {
+    "rise": "Rise",
+    "set": "Set",
+    "maxElevation": "Max elevation",
+    "dayLength": "Day length"
+  },
+  "sector": {
+    "azimuthRiseSet": "Azimuth rise/set",
+    "northPole": "North Pole",
+    "southPole": "South Pole",
+    "primeMeridian": "Prime Meridian (0°)",
+    "sunPathDirection": {
+      "north": "Clockwise (north hemisphere)",
+      "south": "Counter-clockwise (south hemisphere)"
+    },
+    "sunPathLabel": "Sun path direction",
+    "dayLabel": "day",
+    "tropicCancer": "Tropic of Cancer",
+    "tropicCapricorn": "Tropic of Capricorn",
+    "arcticCircle": "Arctic Circle",
+    "antarcticCircle": "Antarctic Circle"
+  },
+  "help": {
+    "title": "Help",
+    "intro": "SolarOne Web calculates and visualizes solar data for places using browser-only storage.",
+    "quickStartTitle": "Quick Start",
+    "quickStart1": "Use World Map to view places and select/deselect them.",
+    "quickStart2": "Use Add Place to geocode a location, adjust coordinates, and save.",
+    "quickStart3": "Use Graphs to render Rise/Set, Max Elevation, and Length of Day.",
+    "quickStart4": "Use Solar Sector to inspect sunrise-to-sunset azimuth sector by day.",
+    "dataTitle": "Data and Storage",
+    "data1": "All data is stored in your browser (localStorage), no backend required.",
+    "data2": "Starter places are seeded on first run; use Restore Starter Places if needed.",
+    "data3": "Yearly solar values are precomputed and cached per place/year for performance.",
+    "noKeyTitle": "No-key Mode Notes",
+    "noKey1": "Maps use OpenStreetMap tiles (no billing key).",
+    "noKey2": "Geocoding/timezone lookup uses public services and may be rate limited.",
+    "noKey3": "Satellite map style is intentionally not included in no-key mode.",
+    "accessTitle": "Accessibility",
+    "access1": "Status and feedback messages are announced via live regions.",
+    "access2": "Forms use labels and native controls for keyboard and screen-reader support.",
+    "access3": "Use browser zoom and responsive layout for readability on different devices."
+  },
+  "controls": {
+    "none": "None"
+  },
+  "addPlace": {
+    "enterPlaceNameFirst": "Enter place name first.",
+    "searchingGeocoder": "Searching place using no-key geocoder…",
+    "foundVerifyingTimezone": "Found: {displayName}. Verifying timezone/DST…",
+    "geocodeErrorFallback": "{error} You can still set coordinates manually or by map click.",
+    "lookingUpTimezone": "Looking up timezone and DST…",
+    "timezoneSet": "Timezone set to {timezoneId}. DST {dst} by rule inference.",
+    "timezoneErrorFallback": "{error} Keep manual timezone/DST values or retry.",
+    "formCleared": "Form cleared.",
+    "pickedFromMap": "Picked from map",
+    "locationSet": "Location set",
+    "savedAdded": "Saved {name}. Added to world map with precomputed {year} solar data."
+  },
+  "validation": {
+    "placeNameRequired": "Place name is required.",
+    "latitudeRange": "Latitude must be between -90 and 90.",
+    "longitudeRange": "Longitude must be between -180 and 180."
+  },
+  "alerts": {
+    "noPlacesSelected": "No places selected.",
+    "deletedPlaces": "Deleted {count} place(s).",
+    "restoredPlaces": "Restored {count} starter place(s)."
+  },
+  "status": {
+    "ready": "Ready · local places: {places} · yearly data: {readyCount}/{places} ({year})"
+  }
+}
