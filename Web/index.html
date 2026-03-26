@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Core metadata -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SolarOne</title>
+  <!-- UI framework (Bootstrap) -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  />
+  <!-- Map rendering styles (Leaflet) -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <style>
+    :root {
+      --graph-first-fill: rgba(255, 193, 7, 0.28);
+      --graph-second-fill: rgba(220, 53, 69, 0.28);
+      --graph-first-line: #b58100;
+      --graph-second-line: #b02a37;
+    }
+
+    /* small, slightly translucent label for latitude lines */
+    .map-lat-label.leaflet-tooltip {
+      background: rgba(255,255,255,0.85);
+      border-radius: 4px;
+      padding: 2px 6px;
+      color: #222;
+      font-size: 12px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    }
+
+    .graph-place-select-primary {
+      background-color: var(--graph-first-fill);
+      border-color: var(--graph-first-line);
+      color: #212529;
+    }
+
+    .graph-place-select-secondary {
+      background-color: var(--graph-second-fill);
+      border-color: var(--graph-second-line);
+      color: #212529;
+    }
+  </style>
+</head>
+<body class="bg-light">
+  <div class="container py-2">
+    <!-- Top navigation bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm mb-0" aria-label="Primary" style="background-color:#0d3b66;">
+      <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" href="#" role="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#FFD400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="10"/>
+          </svg>
+          <span class="ms-2 fw-bold">SolarOne</span>
+        </a>
+        <div class="d-flex align-items-center ms-3">
+          <select id="language-select" class="form-select form-select-sm" aria-label="Language selector"></select>
+        </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0" id="main-nav" role="tablist" aria-label="Main navigation">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" data-view="world-map" type="button" data-i18n="nav.worldMap">World Map</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" data-view="add-place" type="button" data-i18n="nav.addPlace">Add Place</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" data-view="graphs" type="button" data-i18n="nav.graphs">Graphs</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" data-view="solar-sector" type="button" data-i18n="nav.solarSector">Solar Sector</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" data-view="help" type="button" data-i18n="nav.help">Help</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <!-- World Map view -->
+      <section id="view-world-map" class="card" data-view-panel="world-map">
+        <div class="card-body">
+          <h2 class="h5" data-i18n="views.worldMap">World Map</h2>
+
+          <div id="world-map-canvas" class="border rounded mb-3" style="height: 432px;" aria-label="World map"></div>
+
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            <button id="open-places-dialog" type="button" class="btn btn-outline-primary btn-sm" data-i18n="buttons.places">Places</button>
+            <button id="delete-selected-places" type="button" class="btn btn-outline-danger btn-sm" data-i18n="buttons.deleteSelected">Delete Selected</button>
+            <button id="restore-starter-places" type="button" class="btn btn-outline-secondary btn-sm" data-i18n="buttons.restoreStarter">Restore Starter Places</button>
+          </div>
+
+          <p id="world-map-selection-summary" class="small text-secondary mb-3" role="status" aria-live="polite"></p>
+
+          <dialog id="places-dialog" class="border rounded p-0" style="max-width: 420px; width: 100%;">
+            <form method="dialog" class="p-3">
+              <h3 class="h6" data-i18n="dialogs.selectPlaces">Select Places</h3>
+              <p class="small text-secondary mb-2" data-i18n-attr="title:messages.graphFeedback">Selections here stay synchronized with map marker state.</p>
+              <div id="places-dialog-list" class="mb-3"></div>
+              <div class="d-flex gap-2 justify-content-end">
+                <button id="apply-places-selection" type="button" class="btn btn-primary btn-sm" data-i18n="buttons.apply">Apply</button>
+                <button type="submit" class="btn btn-outline-secondary btn-sm" data-i18n="buttons.close">Close</button>
+              </div>
+            </form>
+          </dialog>
+        </div>
+      </section>
+
+      <!-- Add Place view -->
+      <section id="view-add-place" class="card d-none" data-view-panel="add-place">
+        <div class="card-body">
+          <h2 class="h5" data-i18n="views.addPlace">Add Place</h2>
+          <p class="mb-2" data-i18n="messages.addPlaceHelp">Enter a place (may include an address), then 'Find Place' and 'Save Place' or click on the map to set latitude/longitude.</p>
+         
+          <div id="add-place-feedback" class="small mb-2 text-secondary" role="status" aria-live="polite" data-i18n="messages2.fillAndSave">Fill in values and click Save Place.</div>
+
+          <form id="add-place-form" novalidate>
+            <div class="row g-3">
+              <div class="col-12 col-md-6">
+                <label class="form-label" for="add-place-name" data-i18n="labels.placeName">Place name</label>
+                
+                
+                
+                <input id="add-place-name" class="form-control" type="text" placeholder="e.g. Kuala Lumpur" data-i18n-attr="placeholder:messages.addPlaceExample" required />
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label" for="add-place-timezone">Time zone ID</label>
+                <input id="add-place-timezone" class="form-control" type="text" placeholder="e.g. Europe/London" value="Etc/UTC" />
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label" for="add-place-latitude" data-i18n="labels.latitude">Latitude</label>
+                <input id="add-place-latitude" class="form-control" type="number" step="0.0001" min="-90" max="90" required />
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label" for="add-place-longitude" data-i18n="labels.longitude">Longitude</label>
+                <input id="add-place-longitude" class="form-control" type="number" step="0.0001" min="-180" max="180" required />
+              </div>
+            </div>
+
+            <div class="form-check mt-3">
+              <input id="add-place-uses-dst" class="form-check-input" type="checkbox" />
+              <label class="form-check-label" for="add-place-uses-dst" data-i18n="labels.usesDst">Uses daylight saving time (DST)</label>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 mt-3 mb-3">
+              <button id="add-place-geocode" type="button" class="btn btn-outline-primary btn-sm" data-i18n="buttons.findPlace">Find Place</button>
+              <button id="add-place-save" type="submit" class="btn btn-primary btn-sm" data-i18n="buttons.savePlace">Save Place</button>
+              <button id="add-place-clear" type="button" class="btn btn-outline-secondary btn-sm" data-i18n="buttons.clearForm">Clear Form</button>
+            </div>
+          </form>
+
+          <div id="add-place-map" class="border rounded" style="height: 320px;" aria-label="Add place map"></div>
+          <p class="small text-secondary mt-2 mb-0" data-i18n="messages2.tipClickMap">Tip: click on the map to set exact latitude/longitude.</p>
+        </div>
+      </section>
+
+      <!-- Graphs view -->
+      <section id="view-graphs" class="card d-none" data-view-panel="graphs">
+        <div class="card-body">
+          <h2 class="h5" data-i18n="views.graphs">Graphs</h2>
+         
+          <div class="row g-3 mb-3">
+            <div class="col-12 col-md-3">
+              <label for="graph-place-select" class="form-label" data-i18n="labels.place1">Place 1 (yellow)</label>
+              <select id="graph-place-select" class="form-select form-select-sm graph-place-select-primary"></select>
+            </div>
+            <div class="col-12 col-md-3">
+              <label for="graph-place-select-2" class="form-label" data-i18n="labels.place2">Place 2 (red, optional)</label>
+              <select id="graph-place-select-2" class="form-select form-select-sm graph-place-select-secondary"></select>
+            </div>
+            <div class="col-6 col-md-3">
+              <label for="graph-year-input" class="form-label" data-i18n="labels.year">Year</label>
+              <input id="graph-year-input" class="form-control form-control-sm" type="number" min="1900" max="2100" />
+            </div>
+            <div class="col-6 col-md-3">
+              <label for="graph-mode-select" class="form-label" data-i18n="labels.graphMode">Graph mode</label>
+              <select id="graph-mode-select" class="form-select form-select-sm">
+                <option value="rise-set" data-i18n="graph.modes.rise-set">Rise &amp; Set</option>
+                <option value="max-elevation" data-i18n="graph.modes.max-elevation">Max Elevation</option>
+                <option value="day-length" data-i18n="graph.modes.day-length">Length of Day</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            <button id="graph-render-button" type="button" class="btn btn-primary btn-sm" data-i18n="buttons.renderGraph">Render Graph</button>
+            <button id="graph-year-prev" type="button" class="btn btn-outline-secondary btn-sm" data-i18n="buttons.yearPrev">Year -</button>
+            <button id="graph-year-next" type="button" class="btn btn-outline-secondary btn-sm" data-i18n="buttons.yearNext">Year +</button>
+          </div>
+
+          <div id="graph-feedback" class="small text-secondary mb-2" role="status" aria-live="polite" data-i18n="messages.graphFeedback">Select a place and render graph. Click on graph for details.</div>
+          <div id="graph-color-legend" class="small text-secondary mb-2"></div>
+          <div class="position-relative">
+            <canvas id="solar-graph-canvas" class="border rounded w-100" height="360" aria-label="Solar graph canvas"></canvas>
+            <div id="graph-tooltip" class="position-absolute bg-white border rounded shadow-sm small p-2 d-none" style="max-width: 260px; pointer-events: none;" role="status" aria-live="polite"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Solar Sector view -->
+      <section id="view-solar-sector" class="card d-none" data-view-panel="solar-sector">
+        <div class="card-body">
+          <h2 class="h5" data-i18n="views.solarSector">Solar Sector</h2>
+          <p class="mb-2" data-i18n="messages.sectorHelp">Select a place and use the day-slider. For details click the solar sector.</p>
+
+          <div class="row g-3 mb-3">
+            <div class="col-12 col-md-4">
+              <label for="sector-place-select" class="form-label" data-i18n="labels.place">Place</label>
+              <select id="sector-place-select" class="form-select form-select-sm"></select>
+            </div>
+            <div class="col-6 col-md-2">
+              <label for="sector-year-input" class="form-label" data-i18n="labels.year">Year</label>
+              <input id="sector-year-input" class="form-control form-control-sm" type="number" min="1900" max="2100" />
+            </div>
+            <div class="col-6 col-md-6">
+              <label for="sector-day-slider" class="form-label d-flex justify-content-between">
+                <span data-i18n="labels.dayInYear">Day in year</span>
+                <span id="sector-slider-date" class="text-secondary small"></span>
+              </label>
+              <input id="sector-day-slider" class="form-range" type="range" min="1" max="366" step="1" value="1" />
+            </div>
+          </div>
+
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            <button id="sector-day-prev" type="button" class="btn btn-outline-secondary btn-sm" data-i18n="buttons.dayPrev">Day -</button>
+            <button id="sector-day-next" type="button" class="btn btn-outline-secondary btn-sm" data-i18n="buttons.dayNext">Day +</button>
+            <button id="sector-layer-toggle" type="button" class="btn btn-outline-secondary btn-sm" aria-pressed="false" data-i18n-attr="title:buttons.toggleLayer,aria-label:buttons.toggleLayer" title="Toggle layer" aria-label="Toggle layer">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                <path d="M8.235 1.559a.5.5 0 0 0-.47 0l-7.5 4a.5.5 0 0 0 0 .882L3.188 8 .264 9.559a.5.5 0 0 0 0 .882l7.5 4a.5.5 0 0 0 .47 0l7.5-4a.5.5 0 0 0 0-.882L12.813 8l2.922-1.559a.5.5 0 0 0 0-.882l-7.5-4zM8 9.433 1.562 6 8 2.567 14.438 6 8 9.433zm0 2.532-6.438-3.433L3.188 10 8 12.432 12.813 10l1.626.532L8 11.965z"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-baseline mb-2">
+            <div><strong data-i18n="views.solarSector">Solar Sector</strong> <span id="sector-place-title" class="fw-semibold ms-2"></span></div>
+            <div id="sector-date-label" class="small text-secondary"></div>
+          </div>
+          <div id="sector-feedback" class="small text-secondary mb-2" role="status" aria-live="polite"></div>
+
+          <div id="solar-sector-map" class="border rounded mb-3" style="height: 360px;" aria-label="Solar sector map"></div>
+
+          <!-- Info moved to dialog; keep an empty placeholder for accessibility if needed -->
+          <div style="display:none;">
+            <div id="sector-info" class="small text-secondary" role="status" aria-live="polite"></div>
+          </div>
+
+          <dialog id="sector-info-dialog" class="p-3" aria-labelledby="sector-info-title">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h3 id="sector-info-title" class="h6 mb-0" data-i18n="dialogs.info">Info</h3>
+              <button id="sector-info-close" class="btn btn-sm btn-outline-secondary" data-i18n="buttons.close">Close</button>
+            </div>
+            <div id="sector-info-dialog-body" class="small text-secondary"></div>
+          </dialog>
+        </div>
+      </section>
+
+      <!-- Help view -->
+      <section id="view-help" class="card d-none" data-view-panel="help">
+        <div class="card-body">
+          <h2 class="h5" data-i18n="views.help">Help</h2>
+          <p class="mb-3" data-i18n="help.intro">SolarOne Web calculates and visualizes solar data for places using browser-only storage.</p>
+
+          <h3 class="h6" data-i18n="help.quickStartTitle">Quick Start</h3>
+          <ul class="mb-3">
+            <li data-i18n="help.quickStart1">Use <strong>World Map</strong> to view places and select/deselect them.</li>
+            <li data-i18n="help.quickStart2">Use <strong>Add Place</strong> to geocode a location, adjust coordinates, and save.</li>
+            <li data-i18n="help.quickStart3">Use <strong>Graphs</strong> to render Rise/Set, Max Elevation, and Length of Day.</li>
+            <li data-i18n="help.quickStart4">Use <strong>Solar Sector</strong> to inspect sunrise-to-sunset azimuth sector by day.</li>
+          </ul>
+
+          <h3 class="h6" data-i18n="help.dataTitle">Data and Storage</h3>
+          <ul class="mb-3">
+            <li data-i18n="help.data1">All data is stored in your browser (<strong>localStorage</strong>), no backend required.</li>
+            <li data-i18n="help.data2">Starter places are seeded on first run; use <strong>Restore Starter Places</strong> if needed.</li>
+            <li data-i18n="help.data3">Yearly solar values are precomputed and cached per place/year for performance.</li>
+          </ul>
+
+          <h3 class="h6" data-i18n="help.noKeyTitle">No-key Mode Notes</h3>
+          <ul class="mb-3">
+            <li data-i18n="help.noKey1">Maps use OpenStreetMap tiles (no billing key).</li>
+            <li data-i18n="help.noKey2">Geocoding/timezone lookup uses public services and may be rate limited.</li>
+            <li data-i18n="help.noKey3">Satellite map style is intentionally not included in no-key mode.</li>
+          </ul>
+
+          <h3 class="h6" data-i18n="help.accessTitle">Accessibility</h3>
+          <ul class="mb-0">
+            <li data-i18n="help.access1">Status and feedback messages are announced via live regions.</li>
+            <li data-i18n="help.access2">Forms use labels and native controls for keyboard and screen-reader support.</li>
+            <li data-i18n="help.access3">Use browser zoom and responsive layout for readability on different devices.</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <!-- Global app status line -->
+    <footer class="mt-3 text-secondary small">
+        <span id="app-status" role="status" aria-live="polite" data-i18n="messages.loading">Loading…</span>
+      </footer>
+  </div>
+
+  <!-- Data bootstrap and local storage layer -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="./seed-data.js"></script>
+  <script src="./storage.js"></script>
+  <!-- Mapping library -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <!-- Solar calculations and app orchestration -->
+  <script src="./solar-calc.js"></script>
+  <script src="./i18n.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

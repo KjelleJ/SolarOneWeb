@@ -1,0 +1,156 @@
+{
+  "nav": {
+    "worldMap": "Världskarta",
+    "addPlace": "Lägg till plats",
+    "graphs": "Grafer",
+    "solarSector": "Solsektor",
+    "help": "Hjälp"
+  },
+  "buttons": {
+    "places": "Platser",
+    "deleteSelected": "Radera valda",
+    "restoreStarter": "Återställ startplatser",
+    "findPlace": "Hitta plats",
+    "savePlace": "Spara plats",
+    "clearForm": "Rensa formulär",
+    "renderGraph": "Rita graf",
+    "yearPrev": "År -",
+    "yearNext": "År +",
+    "dayPrev": "Dag -",
+    "dayNext": "Dag +",
+    "toggleLayer": "Växla lager",
+    "close": "Stäng",
+    "apply": "Verkställ"
+  },
+  "views": {
+    "worldMap": "Världskarta",
+    "addPlace": "Lägg till plats",
+    "graphs": "Grafer",
+    "solarSector": "Solsektor",
+    "help": "Hjälp"
+  },
+  "messages": {
+    "graphFeedback": "Välj en plats och rita grafen. Klicka på grafen för detaljer.",
+    "sectorHelp": "Välj en plats och använd dagsreglaget. För detaljer klicka på solsektorn.",
+    "addPlaceHelp": "Ange en plats (kan innehålla adress), klicka 'Hitta plats' och 'Spara plats' eller klicka på kartan för att ställa in latitud/longitud.",
+    "noPlaces": "Inga platser tillgängliga.",
+    "addPlaceExample": "t.ex. Kuala Lumpur",
+    "selectPlaceFirst": "Välj en plats först.",
+    "noYearlyData": "Ingen årdata tillgänglig för vald plats/år.",
+    "graphCanvasUnavailable": "Grafens canvas är inte tillgänglig.",
+    "insufficientData": "Otillräckliga data för valt graf-läge.",
+    "noDataForDate": "Ingen data för detta datum.",
+    "selected": "Vald",
+    "notSelected": "Inte vald",
+    "loading": "Laddar…"
+  },
+  "labels": {
+    "latitude": "Latitud",
+    "longitude": "Longitud",
+    "place": "Plats",
+    "place1": "Plats 1",
+    "place2": "Plats 2 (valfri)",
+    "year": "År",
+    "graphMode": "Graf-läge",
+    "dayInYear": "Dag",
+    "placeName": "Platsnamn",
+    "usesDst": "Använder sommartid (DST)"
+  },
+  "dialogs": {
+    "selectPlaces": "Välj platser",
+    "info": "Info"
+  },
+  "messages2": {
+    "fillAndSave": "Fyll i värden och klicka Spara plats.",
+    "tipClickMap": "Tips: klicka på kartan för att ställa in exakt latitud/longitud.",
+    "selectionSummary": "Valda platser: {selected} / {total}"
+  },
+  "graph": {
+    "modes": {
+      "rise-set": "Uppgång & Nedgång",
+      "max-elevation": "Maxhöjd",
+      "day-length": "Dagens längd"
+    },
+    "legend": {
+      "riseSet": "Uppgång (heldragen) / Nedgång (streckad)"
+    },
+    "label": {
+      "time": "Tid",
+      "deg": "Grader",
+      "daylength": "tt:mm"
+    },
+    "months": ["jan","feb","mar","apr","maj","jun","jul","aug","sep","okt","nov","dec"]
+  },
+  "tooltip": {
+    "rise": "Uppgång",
+    "set": "Nedgång",
+    "maxElevation": "Maxhöjd",
+    "dayLength": "Dagens längd"
+  },
+  "sector": {
+    "azimuthRiseSet": "Azimut uppgång/nedgång",
+    "northPole": "Nordpolen",
+    "southPole": "Sydpolen",
+    "primeMeridian": "0-meridianen",
+    "sunPathDirection": {
+      "north": "Medurs (norra halvklotet)",
+      "south": "Moturs (södra halvklotet)"
+    },
+    "sunPathLabel": "Solens bana",
+    "dayLabel": "dag",
+    "tropicCancer": "Kräftans vändkrets",
+    "tropicCapricorn": "Stenbockens vändkrets",
+    "arcticCircle": "Arktiska cirkeln",
+    "antarcticCircle": "Antarktiska cirkeln"
+  },
+  "help": {
+    "title": "Hjälp",
+    "intro": "SolarOne Web beräknar och visualiserar soldata för valda platser på jorden.",
+    "quickStartTitle": "Snabbstart",
+    "quickStart1": "Använd 'Världskarta' för att visa platser och välj/avmarkera dem.",
+    "quickStart2": "Använd 'Lägg till plats' för att hitta en plats, justera koordinater och spara.",
+    "quickStart3": "Använd 'Grafer' för att rita Uppgång/Nedgång, Maxhöjd och Dagens längd.",
+    "quickStart4": "Använd 'Solsektor' för att inspektera azimutsektorn från soluppgång till solnedgång för en dag.",
+    "dataTitle": "Data och lagring",
+    "data1": "All data lagras i din webbläsare (localStorage), ingen backend krävs.",
+    "data2": "Startplatser skapas vid första körning; använd 'Återställ startplatser vid behov.",
+    "data3": "Årliga solvärden förberäknas och cachas per plats/år för bättre prestanda.",
+    "noKeyTitle": "No-key-läge",
+    "noKey1": "Kartor använder OpenStreetMap-tile (ingen betalnyckel).",
+    "noKey2": "Geokodning/tidszonsökning använder offentliga tjänster och kan ha begränsningar.",
+    "noKey3": "Solsektor använder Esri World Imagery för satellitvy (växla med lagerikonen).",
+    "accessTitle": "Tillgänglighet",
+    "access1": "Status- och återkopplingsmeddelanden annonseras via live-regioner.",
+    "access2": "Formulär använder etiketter och inbyggda kontroller för tangentbord och skärmläsarstöd.",
+    "access3": "Använd webbläsarzoom och responsiv layout för läsbarhet på olika enheter."
+  },
+  "controls": {
+    "none": "Ingen"
+  },
+  "addPlace": {
+    "enterPlaceNameFirst": "Ange platsnamn först.",
+    "searchingGeocoder": "Söker plats med no-key-geokodare…",
+    "foundVerifyingTimezone": "Hittad: {displayName}. Verifierar tidszon/DST…",
+    "geocodeErrorFallback": "{error} Du kan fortfarande ange koordinater manuellt eller genom att klicka på kartan.",
+    "lookingUpTimezone": "Söker tidszon och DST…",
+    "timezoneSet": "Tidszon satt till {timezoneId}. DST {dst} enligt regelinference.",
+    "timezoneErrorFallback": "{error} Behåll manuella tidszon/DST-värden eller försök igen.",
+    "formCleared": "Formulär rensat.",
+    "pickedFromMap": "Vald från kartan",
+    "locationSet": "Plats satt",
+    "savedAdded": "Sparad {name}. Lades till i världskartan med förberäknade solvärden för {year}."
+  },
+  "validation": {
+    "placeNameRequired": "Platsnamn krävs.",
+    "latitudeRange": "Latitud måste vara mellan -90 och 90.",
+    "longitudeRange": "Longitud måste vara mellan -180 och 180."
+  },
+  "alerts": {
+    "noPlacesSelected": "Inga platser valda.",
+    "deletedPlaces": "Raderade {count} plats(er).",
+    "restoredPlaces": "Återställde {count} startplatser."
+  },
+  "status": {
+    "ready": "Klar · lokala platser: {places} · årsdata: {readyCount}/{places} ({year})"
+  }
+}
