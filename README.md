@@ -17,7 +17,7 @@ No backend is required.
 - Solar calculations and yearly precompute/cache per place and year.
 - Graphs (Rise & Set, Max Elevation, Length of Day) in HTML5 Canvas (no graph libraries).
 - Graph tooltip with click inspection and day markers.
-- Solar Sector map overlay with day slider, day +/- controls, animate mode, and info panel.
+- Solar Sector map overlay with day slider, day +/- controls, animate mode, info panel, and satellite/map layer toggle (Esri World Imagery).
 - Help view and accessibility live-region feedback.
 
 ## Architecture
@@ -41,8 +41,8 @@ All data is local to the current browser profile.
 
 ## No-key / No-backend Constraints
 
-- Maps: OpenStreetMap tiles via Leaflet.
-- Satellite mode: intentionally not included in no-key mode.
+- Maps: OpenStreetMap tiles via Leaflet (default).
+- Satellite mode: Solar Sector supports Esri World Imagery satellite view — toggle with the layer icon next to Day +/-.
 - Geocoding/timezone: uses public endpoints; availability/rate limits can vary.
 - No server-side APIs are used for app data.
 
