@@ -18,6 +18,7 @@
     "yearNext": "Year +",
     "dayPrev": "Day -",
     "dayNext": "Day +",
+    "toggleLayer": "Toggle layer",
     "close": "Close",
     "apply": "Apply"
   },
@@ -118,7 +119,7 @@
     "noKeyTitle": "No-key Mode Notes",
     "noKey1": "Maps use OpenStreetMap tiles (no billing key).",
     "noKey2": "Geocoding/timezone lookup uses public services and may be rate limited.",
-    "noKey3": "Satellite map style is intentionally not included in no-key mode.",
+    "noKey3": "Solar Sector uses Esri World Imagery for satellite view (toggle with the layer icon).",
     "accessTitle": "Accessibility",
     "access1": "Status and feedback messages are announced via live regions.",
     "access2": "Forms use labels and native controls for keyboard and screen-reader support.",

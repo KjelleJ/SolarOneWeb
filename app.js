@@ -75,6 +75,8 @@ let latitudeLines = {
 let addPlaceMapInstance = null;
 let addPlaceMarker = null;
 let solarSectorMapInstance = null;
+let solarSectorOsmLayer = null;
+let solarSectorSatLayer = null;
 let solarSectorPlaceMarker = null;
 let solarSectorPolygon = null;
 let solarSectorFullDayCircle = null;
@@ -1873,10 +1875,18 @@ function ensureSolarSectorMap() {
     worldCopyJump: true
   });
 
-  window.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  solarSectorOsmLayer = window.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
     attribution: "&copy; OpenStreetMap contributors"
   }).addTo(solarSectorMapInstance);
+
+  solarSectorSatLayer = window.L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    {
+      maxZoom: 19,
+      attribution: "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
+    }
+  );
 
   solarSectorMapInstance.on("zoomend", () => {
     if (solarSectorState.placeId) {
@@ -2123,12 +2133,29 @@ function startSectorAnimation() {
   }, 900);
 }
 
+function toggleSectorLayer() {
+  if (!solarSectorMapInstance || !solarSectorOsmLayer || !solarSectorSatLayer) {
+    return;
+  }
+  const btn = document.getElementById("sector-layer-toggle");
+  if (solarSectorMapInstance.hasLayer(solarSectorSatLayer)) {
+    solarSectorMapInstance.removeLayer(solarSectorSatLayer);
+    solarSectorOsmLayer.addTo(solarSectorMapInstance);
+    if (btn) btn.setAttribute("aria-pressed", "false");
+  } else {
+    solarSectorMapInstance.removeLayer(solarSectorOsmLayer);
+    solarSectorSatLayer.addTo(solarSectorMapInstance);
+    if (btn) btn.setAttribute("aria-pressed", "true");
+  }
+}
+
 function setupSolarSector() {
   const placeSelect = document.getElementById("sector-place-select");
   const yearInput = document.getElementById("sector-year-input");
   const slider = document.getElementById("sector-day-slider");
   const prev = document.getElementById("sector-day-prev");
   const next = document.getElementById("sector-day-next");
+  const layerToggle = document.getElementById("sector-layer-toggle");
   const animateToggle = document.getElementById("sector-animate-toggle");
 
   if (!placeSelect || !yearInput || !slider || !prev || !next) {
@@ -2179,6 +2206,10 @@ function setupSolarSector() {
     wrapSectorDay(1);
     renderSolarSector();
   });
+
+  if (layerToggle) {
+    layerToggle.addEventListener("click", toggleSectorLayer);
+  }
 
   if (animateToggle) {
     animateToggle.addEventListener("click", () => {

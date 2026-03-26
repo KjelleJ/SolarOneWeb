@@ -18,6 +18,7 @@
     "yearNext": "År +",
     "dayPrev": "Dag -",
     "dayNext": "Dag +",
+    "toggleLayer": "Växla lager",
     "close": "Stäng",
     "apply": "Verkställ"
   },
@@ -117,7 +118,7 @@
     "noKeyTitle": "No-key-läge",
     "noKey1": "Kartor använder OpenStreetMap-tile (ingen betalnyckel).",
     "noKey2": "Geokodning/tidszonsökning använder offentliga tjänster och kan ha begränsningar.",
-    "noKey3": "Satellitkartor ingår inte i no-key-läget.",
+    "noKey3": "Solsektor använder Esri World Imagery för satellitvy (växla med lagerikonen).",
     "accessTitle": "Tillgänglighet",
     "access1": "Status- och återkopplingsmeddelanden annonseras via live-regioner.",
     "access2": "Formulär använder etiketter och inbyggda kontroller för tangentbord och skärmläsarstöd.",
